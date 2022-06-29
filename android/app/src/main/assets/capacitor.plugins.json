@@ -1,0 +1,38 @@
+[
+	{
+		"pkg": "dsiemvandroid",
+		"classpath": "com.pointlesspos.plugins.dsiemvandroid.Admin"
+	},
+	{
+		"pkg": "dsiemvandroid",
+		"classpath": "com.pointlesspos.plugins.dsiemvandroid.Amount"
+	},
+	{
+		"pkg": "dsiemvandroid",
+		"classpath": "com.pointlesspos.plugins.dsiemvandroid.LocalListener"
+	},
+	{
+		"pkg": "dsiemvandroid",
+		"classpath": "com.pointlesspos.plugins.dsiemvandroid.MainActivity"
+	},
+	{
+		"pkg": "dsiemvandroid",
+		"classpath": "com.pointlesspos.plugins.dsiemvandroid.TStream"
+	},
+	{
+		"pkg": "dsiemvandroid",
+		"classpath": "com.pointlesspos.plugins.dsiemvandroid.Transaction"
+	},
+	{
+		"pkg": "dsiemvandroid",
+		"classpath": "com.pointlesspos.plugins.dsiemvandroid.dsiEMVAndroidinstance"
+	},
+	{
+		"pkg": "dsiemvandroid",
+		"classpath": "com.pointlesspos.plugins.dsiemvandroid.dsiemvandroid"
+	},
+	{
+		"pkg": "dsiemvandroid",
+		"classpath": "com.pointlesspos.plugins.dsiemvandroid.dsiemvandroidPlugin"
+	}
+]

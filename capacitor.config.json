@@ -1,0 +1,35 @@
+
+
+{
+  "appId": "com.dsiEMVAndroid.app",
+  "appName": "dsiemvangular",
+  "bundledWebRuntime": false,
+  "npmClient": "npm",
+  "webDir": "dist/dsiemvangular",
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 0
+    },
+    "Keyboard": {
+      "resize": "body",
+      "style": "dark"
+    }
+  },
+  "cordova": {
+    "preferences": {
+      "ScrollEnabled": "true",
+      "BackupWebStorage": "none",
+      "SplashMaintainAspectRatio": "true",
+      "FadeSplashScreenDuration": "300",
+      "SplashShowOnlyFirstTime": "false",
+      "SplashScreen": "screen",
+      "SplashScreenDelay": "3000"
+    }
+  },
+  "server": {
+    "hostname": "dsiemvangular",
+    "iosScheme": "ionic",
+    "androidScheme": "http",
+    "url": "http://192.168.0.16:4300"
+  }
+}

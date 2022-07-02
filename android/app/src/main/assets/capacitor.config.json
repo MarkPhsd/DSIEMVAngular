@@ -28,6 +28,6 @@
 		"hostname": "dsiemvangular",
 		"iosScheme": "ionic",
 		"androidScheme": "http",
-		"url": "http://192.168.0.204:4300"
+		"url": "http://192.168.0.16:4300"
 	}
 }

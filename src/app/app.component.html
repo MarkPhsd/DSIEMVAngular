@@ -2,7 +2,12 @@
   <mat-card-title>DSI EMV Testing</mat-card-title>
 
   <mat-card-content>
-    <button (click)="dsiEMVTest()">Test DSI</button>
+    <div>
+      <button (click)="dsiEMVTest()">Test DSI</button>
+    </div>
+    <div>
+      <button (click)="presentUI()">UI Test</button>
+    </div>
 
     {{message | json}}
   </mat-card-content>

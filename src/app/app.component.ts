@@ -2,6 +2,10 @@ import { Component } from '@angular/core';
 import { Capacitor} from '@capacitor/core';
 import { dsiemvandroid } from 'dsiemvandroid';
 
+// https://capacitorjs.com/docs/v2/plugins/android
+// https://stackoverflow.com/questions/53065255/how-can-i-access-application-in-mainactivity-which-we-get-in-ionic-projects
+// https://developer.android.com/guide/components/intents-common
+// https://stackoverflow.com/questions/5944987/how-to-create-a-popup-window-popupwindow-in-android
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -33,8 +37,18 @@ export class AppComponent {
     try {
       const options = { value: ' value.'}
       const item = await dsiemvandroid.echo(options)
-      console.log('this return ', item)
-      this.message = item;
+
+      this.message = item?.value;
+    } catch (error) {
+      this.message = error;
+    }
+  }
+
+  async presentUI() {
+    try {
+      const options = { value: ' value.'}
+      const item = await dsiemvandroid.presentUI(options)
+      this.message = item?.value;
     } catch (error) {
       this.message = error;
     }

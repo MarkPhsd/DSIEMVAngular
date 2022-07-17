@@ -9,15 +9,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:usesCleartextTraffic="true">
-
+        android:usesCleartextTraffic="true"
+      >
         <activity
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|smallestScreenSize|screenLayout|uiMode"
             android:name="com.dsiEMVAndroid.app.MainActivity"
-            android:launchMode="singleTask"
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.NoActionBarLaunch"
-           >
+            android:launchMode="singleTask"
+            android:exported="true"
+            >
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -31,23 +32,25 @@
             android:authorities="${applicationId}.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths"></meta-data>
+          <meta-data
+            android:name="android.support.FILE_PROVIDER_PATHS"
+            android:resource="@xml/file_paths" />
         </provider>
     </application>
 
-    <!-- Permissions -->
-
   <uses-permission android:name="android.permission.RECORD_AUDIO" />
   <uses-permission android:name="android.permission.BLUETOOTH" />
+  <!-- Needed only if your app communicates with already-paired Bluetooth devices. -->
+  <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
   <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
-
+  <!-- Needed only if your app looks for Bluetooth devices. If your app doesn't use Bluetooth scan results to derive physical location information, you can strongly assert that your app doesn't derive physical location. -->
+  <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
   <uses-permission android:name="android.permission.INTERNET" />
   <!-- Camera, Photos, input file -->
+
   <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
   <!-- Geolocation API -->
+  <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
   <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
   <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
   <uses-feature android:name="android.hardware.location.gps" />
@@ -56,5 +59,9 @@
   <!-- Navigator.getUserMedia -->
   <!-- Video -->
   <uses-permission android:name="android.permission.CAMERA" />
+  <!-- Permissions -->
+  <!-- Needed only if your app makes the device discoverable to Bluetooth devices. -->
+  <uses-permission android:name="android.permission.BLUETOOTH_ADVERTISE" />
+
 
 </manifest>

@@ -37,12 +37,15 @@ import {MatFormFieldModule } from '@angular/material/form-field';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import {DragDropModule } from '@angular/cdk/drag-drop';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 // import {ScrollingModule } from '@angular/cdk/scrolling';
 // import { OverlayModule } from '@angular/cdk/overlay';
 
 @NgModule({
   imports        : [ OverlayModule ],
   exports: [
+    FormsModule,
+    ReactiveFormsModule,
     DragDropModule,
     ScrollingModule,
     MatAutocompleteModule,

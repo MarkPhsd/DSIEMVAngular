@@ -1,10 +1,18 @@
 [
 	{
-		"pkg": "dsiemvandroid",
+		"pkg": "@capacitor-community/bluetooth-le",
+		"classpath": "com.capacitorjs.community.plugins.bluetoothle.BluetoothLe"
+	},
+	{
+		"pkg": "@capacitor/geolocation",
+		"classpath": "com.capacitorjs.plugins.geolocation.GeolocationPlugin"
+	},
+	{
+		"pkg": "dsiemvandroidplugin",
 		"classpath": "com.pointlesspos.plugins.dsiemvandroid.dsiEMVAndroidinstance"
 	},
 	{
-		"pkg": "dsiemvandroid",
+		"pkg": "dsiemvandroidplugin",
 		"classpath": "com.pointlesspos.plugins.dsiemvandroid.dsiemvandroidPlugin"
 	}
 ]

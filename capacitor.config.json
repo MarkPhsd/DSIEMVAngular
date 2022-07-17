@@ -1,8 +1,6 @@
-
-
 {
   "appId": "com.dsiEMVAndroid.app",
-  "appName": "dsiemvangular",
+  "appName": "creditcardprocessortester",
   "bundledWebRuntime": false,
   "npmClient": "npm",
   "webDir": "dist/dsiemvangular",

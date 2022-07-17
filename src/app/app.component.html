@@ -1,15 +1,11 @@
- <mat-card>
-  <mat-card-title>DSI EMV Testing</mat-card-title>
-
+<mat-card>
+  <mat-card-subtitle>Pointless Credit Card Processing Solution</mat-card-subtitle>
   <mat-card-content>
-    <div>
-      <button (click)="dsiEMVTest()">Test DSI</button>
+    <div class="grid-buttons">
+      <div><button mat-raised-button (click)="dsiEMVAndroid()">DSI Emv Android</button>  </div>
+      <div><button mat-raised-button (click)="cardPointe()">Card Point Settings</button> </div>
+      <div><button mat-raised-button (click)="cardPointeTransactions()">Card Point Transaction</button> </div>
     </div>
-    <div>
-      <button (click)="presentUI()">UI Test</button>
-    </div>
-
-    {{message | json}}
   </mat-card-content>
 </mat-card>
-
+<router-outlet></router-outlet>

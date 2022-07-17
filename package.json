@@ -1,6 +1,6 @@
 {
-  "name": "dsiemvangular",
-  "version": "0.0.0",
+  "name": "creditcardprocessortester",
+  "version": "0.0.2",
   "scripts": {
     "ng": "ng",
     "start with IP": "ng serve --configuration development --public-host --host=192.168.0.16 --port=4300 ",
@@ -12,6 +12,7 @@
   "private": true,
   "dependencies": {
     "@angular/animations": "^14.0.0",
+    "@angular/cdk": "^14.0.3",
     "@angular/common": "^14.0.0",
     "@angular/compiler": "^14.0.0",
     "@angular/core": "^14.0.0",
@@ -20,12 +21,24 @@
     "@angular/platform-browser": "^14.0.0",
     "@angular/platform-browser-dynamic": "^14.0.0",
     "@angular/router": "^14.0.0",
+    "@awesome-cordova-plugins/android-permissions": "^5.44.0",
+    "@capacitor-community/bluetooth-le": "^1.8.2",
     "@capacitor/android": "^3.6.0",
     "@capacitor/core": "^3.6.0",
+    "@capacitor/geolocation": "^1.3.1",
     "@capacitor/ios": "^3.6.0",
-    "dsiemvandroid": "file:../plugins/dsiemvandroidplugin",
+    "@ionic-native/android-permissions": "^5.36.0",
+    "@ionic-native/bluetooth-serial": "^5.36.0",
+    "@ionic-native/core": "^5.36.0",
+    "@ionic-native/in-app-browser": "^5.36.0",
+    "@ionic-native/serial": "^5.36.0",
+    "cordova-plugin-android-permissions": "^1.1.3",
+    "cordova-plugin-bluetooth-serial": "^0.4.7",
+    "dsiemvandroidplugin": "file:../plugins/dsiemvandroidplugin",
+    "ngx-xml2json": "^1.0.2",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",
+    "xml2js": "^0.4.23",
     "zone.js": "~0.11.4"
   },
   "devDependencies": {

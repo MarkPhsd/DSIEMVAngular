@@ -2,6 +2,14 @@
 <widget version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
   <access origin="*" />
   
+  <feature name="Permissions">
+    <param name="android-package" value="com.android.plugins.Permissions"/>
+  </feature>
+
+  <feature name="BluetoothSerial">
+    <param name="android-package" value="com.megster.cordova.BluetoothSerial"/>
+  </feature>
+
   
   <preference name="ScrollEnabled" value="true" />
   <preference name="BackupWebStorage" value="none" />

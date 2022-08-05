@@ -1,10 +1,10 @@
 button {
   height:55px;
-  width: 175px;
+  width: 155px;
   margin: 10px;
 }
 
 .grid-buttons {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
 }

@@ -1,0 +1,46 @@
+<mat-card>
+  <mat-card-subtitle>
+    User Settings
+  </mat-card-subtitle>
+  <mat-card-content>
+    <div *ngIf="inputForm"
+         [formGroup]="inputForm">
+      <div>
+        <mat-label>User Name </mat-label>
+        <div>
+          <mat-form-field
+            appearance="outline">
+            <input matInput
+            class="mat-label"
+            formControlName="userName">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div>
+        <mat-label>Password</mat-label>
+        <div>
+          <mat-form-field
+              appearance="outline">
+            <input matInput
+              class="mat-label"
+              formControlName="password">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div>
+        <mat-label>API URL</mat-label>
+        <div>
+          <mat-form-field
+                appearance="outline">
+            <input matInput
+              class="mat-label"
+              formControlName="apiURL">
+          </mat-form-field>
+        </div>
+      </div>
+
+    </div>
+  </mat-card-content>
+</mat-card>

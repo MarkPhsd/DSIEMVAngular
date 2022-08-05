@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { PlatformService } from './platform.service';
+import { CardPointBoltService } from './card-point-bolt.service';
 
-describe('PlatformService', () => {
-  let service: PlatformService;
+describe('CardPointBoltService', () => {
+  let service: CardPointBoltService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(PlatformService);
+    service = TestBed.inject(CardPointBoltService);
   });
 
   it('should be created', () => {

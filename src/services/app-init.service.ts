@@ -5,7 +5,6 @@ import { Router } from '@angular/router';
 import { ISite } from 'src/models/site';
 import { PlatFormService } from './platform.service';
 
-
 export interface IAppConfig {
   apiUrl : string
   useAppGate: boolean;

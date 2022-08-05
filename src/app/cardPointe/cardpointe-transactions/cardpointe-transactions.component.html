@@ -1,1 +1,40 @@
-<p>cardpointe-transactions works!</p>
+<mat-card>
+  <mat-card-title>
+    Connectivity
+  </mat-card-title>
+  <mat-card-content>
+
+    <div class="button-grid">
+      <div>
+        <button mat-raised-button color="primary" (click)="sendPing()">Ping</button>
+      </div>
+      <div>
+        <button mat-raised-button color="primary" (click)="sendlistTerminals()">credentialtest</button>
+      </div>
+      <div>
+          <button mat-raised-button color="primary" (click)="sendconnect()">connect</button>
+      </div>
+      <div>
+        <button mat-raised-button color="primary" (click)="sendDisconnect()">Disconnect</button>
+      </div>
+    </div>
+
+    <div *ngIf="(ping$ | async) as item">
+      {{item | json}}
+    </div>
+    <div *ngIf="(listTerminals$ | async) as item">
+      {{item | json}}
+    </div>
+    <div *ngIf="(connect$ | async) as item">
+      {{item | json}}
+    </div>
+    <div *ngIf="(disconnect$ | async) as item">
+      {{item | json}}
+    </div>
+
+    Bolt Info: {{boltInfo | json}}
+  </mat-card-content>
+
+</mat-card>
+
+

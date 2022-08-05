@@ -30,5 +30,9 @@ export class AppComponent implements OnInit {
     this.router.navigateByUrl('cardpointtransactions')
   }
 
+  settings() {
+    this.router.navigateByUrl('settings')
+  }
+
 }
 

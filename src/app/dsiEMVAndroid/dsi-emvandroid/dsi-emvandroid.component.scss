@@ -74,4 +74,11 @@ mat-option i {
   grid-template-columns: 1fr 1fr ;
   width: 100%;
   grid-auto-flow: row;
+  max-width: 650px;
+  width: 500px;
+}
+
+
+.response {
+  margin: 5px;
 }

@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">dsiemvangular</string>
-    <string name="title_activity_main">dsiemvangular</string>
+    <string name="app_name">creditcardprocessortester</string>
+    <string name="title_activity_main">creditcardprocessortester</string>
     <string name="package_name">com.dsiEMVAndroid.app</string>
     <string name="custom_url_scheme">com.dsiEMVAndroid.app</string>
 </resources>

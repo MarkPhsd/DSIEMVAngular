@@ -2,11 +2,10 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
+import { PointlessCCPanelComponent } from './app.component';
 import { MaterialModule } from './material.module';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { SafePipe } from './safe-pipe.pipe';
-import { BluetoothSerial } from '@ionic-native/bluetooth-serial/ngx';
 import { CardPointSettingsComponent } from './cardPointe/card-point-settings/card-point-settings.component';
 import { DsiEMVAndroidComponent } from './dsiEMVAndroid/dsi-emvandroid/dsi-emvandroid.component';
 import { CpVIVO3300Component } from './cardPointe/cp-vivo3300/cp-vivo3300.component';
@@ -16,17 +15,17 @@ import { ErrorInterceptor } from './interceptors/error.interceptor';
 import { BasicAuthInterceptor } from './interceptors/basic-auth.interceptor';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CardpointeTransactionsComponent } from './cardPointe/cardpointe-transactions/cardpointe-transactions.component';
+import { CardPointIDTECHAndroidComponent } from './cardPointe/card-point-idtechandroid/card-point-idtechandroid.component';
+import { DSIAndroidSettingsComponent } from './dsiEMVAndroid/dsiandroid-settings/dsiandroid-settings.component';
+import { DsiAndroidResultsComponent } from './dsiEMVAndroid/dsi-android-results/dsi-android-results.component';
+// export { PointlessCCDSIEMVAndroidService } from './services/dsiemvandroid.service';
+// export { PointlessCCDsiAngularService } from './services/dsi-angular.service';
+// export { DeviceInfoService} from './services/device-info.service';
+// export { CardPointService} from './services/card-point.service';
+// export { CardPointMethodsService} from  './services/card-point-methods.service';
+// export { CardPointBoltService} from  './services/card-point-bolt.service';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    CardPointSettingsComponent,
-    DsiEMVAndroidComponent,
-    CardpointeTransactionsComponent,
-    CpVIVO3300Component,
-    UserSettingsComponent,
-    SafePipe
-  ],
   imports: [
     HttpClientModule,
     BrowserAnimationsModule,
@@ -34,18 +33,50 @@ import { CardpointeTransactionsComponent } from './cardPointe/cardpointe-transac
     AppRoutingModule,
     MaterialModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+  ],
+  declarations: [
+    PointlessCCPanelComponent,
+    CardPointSettingsComponent,
+    CardPointIDTECHAndroidComponent,
+    CardpointeTransactionsComponent,
+    CpVIVO3300Component,
+    DsiEMVAndroidComponent,
+    DSIAndroidSettingsComponent,
+    DsiAndroidResultsComponent,
+    UserSettingsComponent,
+    SafePipe,
   ],
   exports: [
-    HttpClientModule,
-    MaterialModule
+    PointlessCCPanelComponent,
+    CardPointSettingsComponent,
+    CardPointIDTECHAndroidComponent,
+    CardpointeTransactionsComponent,
+    CpVIVO3300Component,
+    DsiEMVAndroidComponent,
+    DSIAndroidSettingsComponent,
+    DsiAndroidResultsComponent,
+    UserSettingsComponent,
   ],
+
   providers:  [
     { provide: HTTP_INTERCEPTORS,  useClass: BasicAuthInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS,  useClass: ErrorInterceptor, multi: true },
-    BluetoothSerial
   ],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
-  bootstrap: [AppComponent]
+  bootstrap: [PointlessCCPanelComponent],
+  entryComponents: [
+    PointlessCCPanelComponent,
+    // CardPointSettingsComponent,
+    // CardPointIDTECHAndroidComponent,
+    // CardpointeTransactionsComponent,
+    // CpVIVO3300Component,
+    // DsiEMVAndroidComponent,
+    // DSIAndroidSettingsComponent,
+    // DsiAndroidResultsComponent,
+    // DsiAndroidResultsComponent,
+   ]
 })
-export class AppModule { }
+export class PaymentProcessingModule { }
+
+

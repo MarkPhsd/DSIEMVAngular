@@ -1,13 +1,12 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-
 @Component({
-  selector: 'app-root',
+  selector: 'payment-processing-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
 
-export class AppComponent implements OnInit {
+export class PointlessCCPanelComponent implements OnInit {
 
   constructor(private router: Router) {
 
@@ -22,6 +21,7 @@ export class AppComponent implements OnInit {
   dsiEMVAndroid() {
     this.router.navigateByUrl('dsievmAndroid')
   }
+
   cardPointe() {
     this.router.navigateByUrl('cardPointSetings')
   }
@@ -30,9 +30,18 @@ export class AppComponent implements OnInit {
     this.router.navigateByUrl('cardpointtransactions')
   }
 
+  cardPointeAndroid() {
+    this.router.navigateByUrl('cardPointAndroid')
+  }
+
   settings() {
     this.router.navigateByUrl('settings')
   }
 
 }
 
+// { path: 'dsievmAndroid',   component: DsiEMVAndroidComponent,   data: { animation: 'isLeft'} },
+// { path: 'cardPointSetings', component: CardPointSettingsComponent,   data: { animation: 'isLeft'} },
+// { path: 'cardPointAndroid', component: CardPointIDTECHAndroidComponent,   data: { animation: 'isLeft'} },
+// { path: 'cardpointtransactions', component: CardpointeTransactionsComponent,   data: { animation: 'isLeft'} },
+// ]

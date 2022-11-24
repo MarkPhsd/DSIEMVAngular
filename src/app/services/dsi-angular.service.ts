@@ -1,41 +1,10 @@
-import { ANIMATION_MODULE_TYPE, Injectable } from '@angular/core';
-import { MatSliderChange } from '@angular/material/slider';
-
-export interface Amount {
-  amount: string;
-}
-export interface Transaction {
-   merchantID: string;
-   userTrace: string;
-   pOSPackageID: string;
-   tranCode: string;
-   secureDevice: string;
-   invoiceNo: string;
-   amount: Amount;
-   sequenceNo: string;
-   bluetoothDeviceName: string;
-   operationMode: string;
-   recordNo: string;
-   refNo: string;
-   pinPadIpAddress: string;
-   padPort: string;
-}
-
-export interface Admin {
-   merchantID: string;
-   userTrace: string;
-   pOSPackageID: string;
-   tranCode: string;
-   secureDevice: string;
-   sequenceNo: string;
-   bluetoothDeviceName: string;
-   operationMode: string;
-}
+import { Injectable } from '@angular/core';
+import { Admin, Amount, Transaction } from 'src/app/models/models';
 
 @Injectable({
   providedIn: 'root'
 })
-export class DsiAngularService {
+export class PointlessCCDsiAngularService {
 
   constructor() { }
 
@@ -64,7 +33,7 @@ export class DsiAngularService {
       newSale.sequenceNo    = "0010010010"
       newSale.operationMode = operationMode
       newSale.secureDevice  = "RecordNumberRequested"
-      newSale.amount        = amt
+      // newSale.amount        = amt.amount
       newSale.refNo         = refNo
 
       if (secureDevice) {
@@ -98,45 +67,35 @@ export class DsiAngularService {
       const admin = {} as Admin;
       tStream.TStream(newSale, admin);
 
-      // const array = new Uint8Array(tStream.TStream())
-    }
 
-    setupParamDownload(device: string,merchantID: string, padIP: string, padPort: string, operationMode: string, refNo: string, secureDevice: string) {
+  }
 
-      const admin         = {} as Admin;
-      admin.userTrace     = merchantID
-      admin.pOSPackageID  = "PointlessPOS1.0"
-      admin.secureDevice  = "EMVUSClient:1.27"
-      admin.tranCode      = "EMVSale"
-      admin.secureDevice  = "10"
-      admin.sequenceNo    = "0010010010"
-      admin.operationMode = operationMode
+  setupParamDownload(device: string,merchantID: string, padIP: string, padPort: string, operationMode: string, refNo: string, secureDevice: string) {
 
-      if (device === 'LANE3000_IP') {
+    const admin         = {} as Admin;
+    admin.userTrace     = merchantID
+    admin.pOSPackageID  = "PointlessPOS1.0"
+    admin.secureDevice  = "EMVUSClient:1.27"
+    admin.tranCode      = "EMVSale"
+    admin.secureDevice  = "10"
+    admin.sequenceNo    = "0010010010"
+    admin.operationMode = operationMode
 
-      }
-
-      if (device === 'VP300_USB' || device === 'VP300_RS232') {
-        secureDevice = "EMV_VP3300_DATACAP";
-        if (device === 'VP300_RS232') {
-          secureDevice = "EMV_VP3300_DATACAP_RS232";
-        }
-        admin.secureDevice  = secureDevice
-      }
+    if (device === 'LANE3000_IP') {
 
     }
 
-    // ByteArrayOutputStream bao = new ByteArrayOutputStream();
-    // Serializer serializer = new Persister();
-    // try {
-    //     serializer.write(tStream, bao);
-    // } catch (Exception ex) {
-    //     //serialization exception
-    // }
-    // return bao.toString();
+    if (device === 'VP300_USB' || device === 'VP300_RS232') {
+      secureDevice = "EMV_VP3300_DATACAP";
+      if (device === 'VP300_RS232') {
+        secureDevice = "EMV_VP3300_DATACAP_RS232";
+      }
+      admin.secureDevice  = secureDevice
+    }
+
+  }
 
 }
-
 
 @Injectable({
   providedIn: 'root'

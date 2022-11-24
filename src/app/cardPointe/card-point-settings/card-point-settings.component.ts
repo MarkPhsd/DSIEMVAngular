@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { BoltInfo } from 'src/app/services/card-point.service';
+import { BoltInfo } from 'src/app/models/models';
+import { CardPointMethodsService } from  'src/app/services/card-point-methods.service';
 import { DeviceInfoService } from 'src/app/services/device-info.service';
 
 @Component({
@@ -15,6 +16,7 @@ export class CardPointSettingsComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
+    public methodsService: CardPointMethodsService,
     public deviceInfoService: DeviceInfoService) {
   }
 
@@ -31,7 +33,6 @@ export class CardPointSettingsComponent implements OnInit {
       const item = {} as BoltInfo
       this.inputForm.patchValue(item);
     }
-
   }
 
   initForm() {
@@ -46,11 +47,10 @@ export class CardPointSettingsComponent implements OnInit {
 
   save() {
     const bolt = this.inputForm.value as BoltInfo;
-    console.log(bolt)
     if (bolt) {
       const item = JSON.stringify(bolt)
       localStorage.setItem('boltInfo', item)
-      console.log(localStorage.getItem('boltInfo'))
+      this.methodsService.boltInfo = bolt;
     }
     this.deviceInfoService.setDeviceName(this.deviceName)
   }

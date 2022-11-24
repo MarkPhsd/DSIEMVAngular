@@ -1,47 +1,103 @@
-import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
-import { CardPointBoltService } from 'src/app/services/card-point-bolt.service';
-import { BoltInfo } from 'src/app/services/card-point.service';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { CardPointMethodsService } from 'src/app/services/card-point-methods.service';
 
 @Component({
   selector: 'app-cardpointe-transactions',
   templateUrl: './cardpointe-transactions.component.html',
   styleUrls: ['./cardpointe-transactions.component.scss']
 })
-export class CardpointeTransactionsComponent implements OnInit {
+export class CardpointeTransactionsComponent implements OnInit, OnDestroy {
 
-  ping$: Observable<any>;
-  connect$: Observable<any>;
-  listTerminals$: Observable<any>;
-  disconnect$: Observable<any>;
+  sale$: Observable<any>;
+  auth$: Observable<any>;
 
-  boltInfo: BoltInfo;
+  // private sale: Subscription;
+  private _sale               = new BehaviorSubject<number>(null);
+  public itemProcessSection$  = this._sale.asObservable();
 
-  constructor(private cardPointBoltService: CardPointBoltService,
+
+  constructor(  public methodsService: CardPointMethodsService
               ) { }
 
   ngOnInit(): void {
-    console.log('')
-    this.boltInfo =  JSON.parse(localStorage.getItem('boltInfo'))
+    this.connectToBolt()
+    this.processSale();
   }
 
-  ///
-  sendPing() {
-
-    this.ping$ = this.cardPointBoltService.ping( this.boltInfo.apiURL, this.boltInfo.hsn)
+  connectToBolt() {
+    return this.methodsService.getConnect().subscribe( data => {
+        this.methodsService.connect = data
+        this.methodsService.initTerminal(data.xSessionKey, data.expiry);
+      }
+    )
   }
 
-  sendconnect() {
-    this.connect$ = this.cardPointBoltService.connect( this.boltInfo.apiURL, this.boltInfo.hsn)
-  }
-
-  sendlistTerminals() {
-    this.listTerminals$ = this.cardPointBoltService.listTerminals( this.boltInfo.apiURL, this.boltInfo.hsn)
-  }
-
-  sendDisconnect() {
-    this.disconnect$ = this.cardPointBoltService.disconnect( this.boltInfo.apiURL, this.boltInfo.hsn)
+  ngOnDestroy(): void {
+    //Called once, before the instance is destroyed.
+    //Add 'implements OnDestroy' to the class.
+    if ( this._sale) { this._sale.unsubscribe()}
   }
 
 
+
+  processSale() {
+    this._sale.subscribe(data => {
+      const bolt = this.methodsService.initTerminal(this.methodsService.connect.xSessionKey, this.methodsService.connect.expiry);
+      const auth = this.methodsService.getAuthCaptureRequest(data)
+      this.methodsService.processSale(this.methodsService.amount, this.methodsService.orderID, auth)
+      .subscribe(data => {
+        this.methodsService.processing = false;
+        this.methodsService.sale = data;
+        this.methodsService.retRef = data?.retref
+      })
+    })
+  }
+
+  processVoid(retRef) {
+    this.methodsService.processing = true;
+    this.methodsService.voidByRetRef(retRef)
+    .subscribe(data => {
+      this.methodsService.processing = false;
+      this.methodsService.sale = data;
+      this.methodsService.retRef = data?.retref
+    })
+  }
+
+  refundByRetRef(retRef) {
+    this.methodsService.processing = false;
+    console.log('refund by RetRef')
+    this.methodsService.refundByRetRef(retRef)
+    .subscribe(data => {
+      this.methodsService.processing = true;
+      this.methodsService.sale = data;
+      this.methodsService.retRef = data?.retref
+    })
+  }
+
+  sendAuthCard() {
+    this.methodsService.initValues()
+    this.methodsService.processing = true;
+    this.methodsService.sendAuthCard(null).subscribe(data => {
+      this.methodsService.processing = false;
+      this.methodsService.transaction = data;
+      this.methodsService.retRef = data?.retref
+    })
+  }
+
+  sendAuthCardAndCapture() {
+    this.methodsService.initValues()
+    this.methodsService.processing = true;
+    this.methodsService.sendAuthCard(null).subscribe(data => {
+      this._sale.next(data)
+    })
+  }
+
+  pinDebitSaleAuthCapture(){
+    this.methodsService.initValues()
+    this.methodsService.processing = true;
+    this.methodsService.sendAuthCard('debit').subscribe(data => {
+      this._sale.next(data)
+    })
+  }
 }

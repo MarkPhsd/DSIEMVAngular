@@ -1,15 +1,10 @@
 
-import { isNgTemplate } from '@angular/compiler';
-import { Component, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { Component,EventEmitter,Input,OnInit, Output } from '@angular/core';
 import { Capacitor} from '@capacitor/core';
+import { TranResponse, Transaction } from 'src/app/models/models';
 import { dsiemvandroid } from 'dsiemvandroidplugin';
-import { BluetoothSerial } from '@ionic-native/bluetooth-serial/ngx';
 import { NgxXml2jsonService } from 'ngx-xml2json';
-import { Geolocation } from '@capacitor/geolocation';
-import { AndroidPermissions } from '@ionic-native/android-permissions';
-import { BleClient } from '@capacitor-community/bluetooth-le';
-import { Transaction } from 'src/services/dsi-angular.service';
+import { PointlessCCDSIEMVAndroidService } from 'src/app/services/dsiemvandroid.service';
 
 // https://www.npmjs.com/package/capacitor-plugin-permissions
 // https://capacitorjs.com/docs/v2/plugins/android
@@ -21,14 +16,22 @@ import { Transaction } from 'src/services/dsi-angular.service';
 // https://stackoverflow.com/questions/28094523/cannot-find-mainactivity-for-intent-inside-cordova-plugin
 
 @Component({
-  selector: 'app-dsi-emvandroid',
+  selector: 'pointlesscc-dsi-emvandroid',
   templateUrl: './dsi-emvandroid.component.html',
   styleUrls: ['./dsi-emvandroid.component.scss']
 })
 export class DsiEMVAndroidComponent implements OnInit {
+
+  @Input() isAdmin = true;
+  @Input() isManager: boolean;
+  @Input() transaction: Transaction;
+  @Output() getTranResponse = new EventEmitter();
+  @Output() getCmdResponse = new EventEmitter();
+
   request       : string;
   cancelResponse: boolean;
   processRunning: boolean;
+  messageResponse: string;
 
   btTransactionResponse: string;
   btcmdResponse: string;
@@ -40,24 +43,24 @@ export class DsiEMVAndroidComponent implements OnInit {
   transactionResponse : any;
   responseURL = 'http://localhost:8080/' ;
   selected: any;
-
-  blueToothDeviceList: any;
+  hideRequest = true;
+  // blueToothDeviceList: any;
   btDeviceSelected  = '';
   btDeviceConnected = false;
 
   dsiDeviceList : any;
   secureDevice: any;
 
-  transactionForm!: FormGroup;
   viewSelectDeviceList = false;
 
   ////////////////////////
-  cmdResponse  = ''
-  textResponse = ''
+  cmdResponse  :any;
+  textResponse : any;
+  tranResponse : any;
+  responseSuccess = ''
 
   get isAndroid() {
     const platForm =   Capacitor.getPlatform();
-
     if (platForm === 'android') {
       return true
     }
@@ -66,264 +69,79 @@ export class DsiEMVAndroidComponent implements OnInit {
 
   constructor(
      private ngxXml2jsonService: NgxXml2jsonService,
-     private btSerial: BluetoothSerial,
-     private fb: FormBuilder){}
+     public dSIEMVAndroidService: PointlessCCDSIEMVAndroidService,
+     ){}
 
   async ngOnInit() {
-    //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
-    //Add 'implements OnInit' to the class.
     this.resetResponse();// = ''
-    await this.initForm();
-    await this.getDeviceInfo();
-    await this.listBTDevices();
-    await this.initForm();
     this.message = "...waiting for test results."
-    await BleClient.initialize({ androidNeverForLocation: false });
+    this.getMessageResponse();
   }
 
   async checkBTPermission() {
-    // ACCESS_FINE_LOCATION
-    await Geolocation.requestPermissions();
-    this.requestBTCTPermission();
-    this.requestBTPermission();
-  }
-
-  requestCameraPermission() {
-      if (Capacitor.isNativePlatform()) {
-          AndroidPermissions.checkPermission(AndroidPermissions.PERMISSION.CAMERA).then(
-              result => {
-                  if (result.hasPermission) {
-                      //alert('you already have this permission')
-                      alert('camera permission already granted');
-                  } else {
-                      alert('Camera Failed, please implement permission request')
-                      AndroidPermissions.requestPermission(AndroidPermissions.PERMISSION.CAMERA);
-                  }
-              }
-          )
-      }
-      else {
-        alert('Capacitor CAMERA not detected');
-        console.log('Capacitor not detected')
-      }
-  }
-
-  requestBTCTPermission() {
-    if (Capacitor.isNativePlatform()) {
-      console.log('requestBTCTPermission BLUETOOTH_CONNECT')
-        AndroidPermissions.checkPermission(AndroidPermissions.PERMISSION.BLUETOOTH_CONNECT).then(
-            result => {
-                console.log('requestBTCTPermission BLUETOOTH_CONNECT 2', result)
-                if (result.hasPermission) {
-                    //alert('you already have this permission')
-                    alert('BLUETOOTH_CONNECT permission already granted');
-                } else {
-                    alert('BLUETOOTH_CONNECT Failed, please implement permission request')
-                    AndroidPermissions.requestPermission(AndroidPermissions.PERMISSION.BLUETOOTH_CONNECT);
-                }
-            }
-        )
-    }
-    else {
-      alert('Capacitor BLUETOOTH_CONNECT not detected');
-      console.log('Capacitor not detected')
-    }
-  }
-
-  requestBTPermission() {
-    if (Capacitor.isNativePlatform()) {
-        AndroidPermissions.checkPermission(AndroidPermissions.PERMISSION.BLUETOOTH).then(
-            result => {
-                if (result.hasPermission) {
-                    //alert('you already have this permission')
-                    alert('BLUETOOTH permission already granted');
-                } else {
-                    alert('BLUETOOTH Failed please implement permission request')
-                    AndroidPermissions.requestPermission(AndroidPermissions.PERMISSION.BLUETOOTH);
-                }
-            }
-        )
-    }
-    else {
-      alert('Capacitor BLUETOOTH not detected');
-      console.log('Capacitor not detected')
-    }
-  }
-
-  async listBTDevices() {
-    //This will return a list of bluetooth devices
-    this.blueToothDeviceList = await this.btSerial.list();
+    const options = {value: 'test'};
+    dsiemvandroid.getHasPermission(options)
   }
 
   async getDeviceInfo() {
-    try {
-
-      const form = this.transactionForm;
-      const options = form.value as Transaction;
-      options.merchantID = options.merchantID;
-      options.pinPadIpAddress = options.pinPadIpAddress;
-      options.padPort = options.padPort;
-
-      const item    = await dsiemvandroid.getDeviceInfo(options);
-      const results = item as any;
-
-      const parser = new DOMParser();
-      results.value = results.value.replace('#', '')
-      const xml = parser.parseFromString(results.value, 'text/xml');
-      const obj = this.ngxXml2jsonService.xmlToJson(xml) as any;
-      this.dsiDeviceList = obj;
-      console.log('devices', obj);
-
-    } catch (error) {
-      this.message = error;
-    }
-  }
-
-  async initForm() {
-    const options = { value: ' value.'}
-    const ipValue = await dsiemvandroid.getIPAddressPlugin(options)
-    const ipAddress = ipValue?.value;
-    const item = this.getSavedSettings();
-
-    this.transactionForm = this.fb.group({
-      merchantID: ['CAFECSAND3GP'],
-      userTrace: ['User'],
-      pOSPackageID: ['PointlessPOS1.0'],
-      tranCode: ['EMVSale'],
-      secureDevice: ['EMV_VP3300_DATACAP'],
-      invoiceNo: ['100'],
-      sequenceNo: ['0010010010'],
-      bluetoothDeviceName: [''],
-      operationMode: ['cert'],
-
-      amount: ['1.00'],
-      recordNo: ['RecordNumberRequested'],
-      refNo: ['1'],
-      pinPadIpAddress: [ipAddress],
-      padPort: ['1200'],
-    })
-
-    if (item) {
-      this.transactionForm.patchValue(item)
-    }
-
-    this.setBtDevice(item?.bluetoothDeviceName)
-    this.subscribeChanges();
-  }
-
-  subscribeChanges() {
-    this.transactionForm.valueChanges.subscribe( data => {
-      this.savedSettings();
-    })
-  }
-
-  getSavedSettings(): Transaction | undefined {
-    const setting = localStorage.getItem('DSIEMVSetting')
-    if (setting) {
-      const item = JSON.parse(setting) as Transaction;
-      this.setting = item;
-      return item
-    }
-  }
-
-  savedSettings() {
-    if (this.transactionForm && this.transactionForm.value) {
-      const item = this.transactionForm.value;
-      this.saveSetting(item)
-    }
-  }
-
-  saveSetting(item: any) {
-    const setting = JSON.stringify(item);
-    localStorage.setItem('DSIEMVSetting', setting);
+    return  await  this.dSIEMVAndroidService.getDeviceInfo;
   }
 
   async resetResponse() {
-    this.cmdResponse = '';
+    this.tranResponse = null;
+    this.cmdResponse  = '';
     this.textResponse = '';
-
     if (this.processRunning) {
       this.cancelResponse = true;
     }
-
     const options = {value:''}
-    await dsiemvandroid.setResponse(options);
+    const result  = await dsiemvandroid.setResponse(options);
   }
 
   async resetbtResponse() {
     this.btTextResponse = '';
     this.btcmdResponse = '';
-
     if (this.processRunning) {
       this.cancelResponse = true;
     }
     const options = {value:''}
-    await dsiemvandroid.setbtResponse(options);
+    const result =  await dsiemvandroid.setbtResponse(options);
   }
 
-  async refreshDevices() {
+  async refreshInfo() {
     await this.resetResponse();
-    await this.getDeviceInfo();
-    await this.listBTDevices();
-    this.initForm();
-  }
-
-  setBtDevice(value: any) {
-    this.selected         = value;
-    this.btDeviceSelected = this.selected;
+    // await this.getDeviceInfo();
+    // await this.listBTDevices();
   }
 
   async connectToBTDevice() {
+    await this.resetbtResponse();
+    this.processRunning = true;
+    const btItem = this.dSIEMVAndroidService.savedSettings;
+    if (!btItem.bluetoothDeviceName) {
+      this.message = 'No Bluetooth Device is selected';
+      return;
+    }
+    this.message = 'Connecting to device. ' + btItem.bluetoothDeviceName
 
-    if (!this.btDeviceConnected && this.btDeviceSelected) {
-      await this.resetbtResponse();
-      this.processRunning = true;
-
-      this.message = 'Connecting to device. ' + this.btDeviceSelected
-      const options = {'bluetoothDeviceName': this.btDeviceSelected};
-
-      try {
-        dsiemvandroid.connectToBT(options);
-        this.checkbtResponse();
-      } catch (error) {
-        console.log('response', error)
-      }
+    try {
+      const options = {'value': btItem.bluetoothDeviceName};
+      const item = await dsiemvandroid.connectToBT(options);
+      await this.checkResponse();
+      const message = {'response': '', value: ''};
+      let value = await dsiemvandroid.getMessageResponse(message);
+      this.messageResponse = value.value;
+    } catch (error) {
+      console.log('response', error)
     }
   }
 
   async disConnectToBTDevice() {
     if (this.btDeviceConnected && this.btDeviceSelected) {
       await this.resetResponse();
-      const options = {'bluetoothDeviceName': this.btDeviceSelected};
+      const options = {'value': this.btDeviceSelected};
       const item = await dsiemvandroid.disconnectFromBt(options);
       await this.checkbtResponse();
-    }
-  }
-
-  async removeBTDevice() {
-    let setting = this.getSavedSettings();
-    setting.bluetoothDeviceName = '';
-    this.saveSetting(setting);
-    this.refreshDevices();
-  }
-
-  async setSecureDevice(event: any) {
-    await this.resetResponse();
-    let setting = this.getSavedSettings() as Transaction;
-
-    setting.secureDevice = event[0];
-    this.saveSetting(setting);
-    this.initForm();
-  }
-
-  async getIPAddress() {
-    try {
-      await this.resetResponse();
-      const options = { value: ' value.'}
-      const item = await dsiemvandroid.getIPAddressPlugin(options)
-      this.message = item?.value;
-    } catch (error) {
-      this.message = error;
     }
   }
 
@@ -331,12 +149,9 @@ export class DsiEMVAndroidComponent implements OnInit {
     try {
       await this.resetResponse();
       this.processRunning = true;
-      const setting = this.getSavedSettings() as Transaction;
-      let options = {} as any;
-      options =  { bluetoothDeviceName: setting.bluetoothDeviceName, secureDevice: setting.secureDevice, merchantID: setting.merchantID,
-                   pinPadIpAddress: setting.pinPadIpAddress, padPort: setting.padPort }
-      const item = await dsiemvandroid.emvPadReset(options)
-      // await this.checkResponse();
+      const item =  await this.dSIEMVAndroidService.dsiEMVReset();
+      this.messageResponse = item?.value;
+      this.processRunning = false;
     } catch (error) {
       this.message = error;
     }
@@ -348,20 +163,16 @@ export class DsiEMVAndroidComponent implements OnInit {
     this.selected = item;
   }
 
-
   async btDisconnect() {
     try {
       await this.resetResponse();
       this.processRunning = true;
-      const options = this.transactionForm.value as any;
-
-      options.merchantID = options.merchantID;
+      const options =  this.dSIEMVAndroidService.savedSettings as any;
+      options.merchantID      = options.merchantID;
       options.pinPadIpAddress = options.pinPadIpAddress;
-      options.padPort = options.padPort;
-
-      const item = await dsiemvandroid.disconnectFromBt(options)
-      this.message = item;
-
+      options.padPort         = options.padPort;
+      const item    = await dsiemvandroid.disconnectFromBt(options)
+      this.message  = item;
       await this.checkResponse();
     } catch (error) {
       this.message = error;
@@ -371,37 +182,70 @@ export class DsiEMVAndroidComponent implements OnInit {
   async emvParamDownload() {
     try {
       await this.resetResponse();
-      this.processRunning = true;
-      const options = this.transactionForm.value as any;
-
-      options.merchantID = options.merchantID;
-      options.pinPadIpAddress = options.pinPadIpAddress;
-      options.padPort = options.padPort;
-
-      const item = await dsiemvandroid.emvParamDownload(options)
-      this.message = item;
-
+      const transaction       = this.dSIEMVAndroidService.savedSettings
+      this.processRunning     = true;
+      const options           = this.dSIEMVAndroidService.savedSettings as any;
+      options.BTDevice        = transaction.bluetoothDeviceName
+      options.secureDevice    = transaction.secureDevice;
+      options.merchantID      = transaction.merchantID;
+      options.pinPadIpAddress = transaction.pinPadIpAddress;
+      options.padPort         = transaction.padPort;
+      const item              = await dsiemvandroid.emvParamDownload(options)
+      this.message            = item;
       await this.checkResponse();
     } catch (error) {
       this.message = error;
     }
   }
 
+  async checkResponse_Transaction() {
+    var timer = setInterval(
+                await this.intervalCheckResponse,
+      500);
+    if(timer){
+        clearInterval(timer)
+    }
+  }
+
+  async intervalCheckResponse() {
+    let responseSuccess = ''
+    let request = ''
+    request = await this.getRequest();
+    this.request = request;
+    responseSuccess =  this.responseSuccess;
+    const item = await this.getResponse();
+    if (item) {
+      if (item.value != '' || this.cancelResponse) {
+        this.cancelResponse = false;
+        this.processRunning = false;
+        responseSuccess     = 'complete'
+        return true;
+      }
+    }
+  }
+
   async  checkResponse() {
     let responseSuccess = ''
     let request = ''
+
     while (request === '') {
       request = await this.getRequest();
       this.request = request;
     }
 
     while (responseSuccess === '') {
-      const value = {value: 'get'}
+      if (this.responseSuccess != '') {
+        responseSuccess =  this.responseSuccess;
+      }
       const item = await this.getResponse();
+      console.log('response', item, responseSuccess, this.responseSuccess)
       if (item) {
         if (item.value != '' || this.cancelResponse) {
           this.cancelResponse = false;
           this.processRunning = false;
+          this.hideRequest    = true;
+
+          this.messageResponse  = item.value;
           responseSuccess     = 'complete'
           return;
         }
@@ -410,54 +254,82 @@ export class DsiEMVAndroidComponent implements OnInit {
   }
 
   async getResponse(){
-    const options = {'response': ''};
+    const options = {'response': '', value: ''};
     const item = await dsiemvandroid.getResponse(options);
+    this.messageResponse = item.value;
     if (item.value) {
       if (item.value.substring(0, 5) === '<?xml' || item.value.substring(0, 5) === '<RStr') {
-
+        this.messageResponse = ''
         const parser = new DOMParser();
         item.value =  item?.value.replace('#', '')
-
         const xml = parser.parseFromString(item.value, 'text/xml');
         const obj = this.ngxXml2jsonService.xmlToJson(xml) as any;
-        console.log('object 1', obj?.RStream)
-        console.log('object 2', obj?.CmdResponse)
-
+        // console.log( 'obj', obj )
         if (item.value.substring(0, 5) === '<?xml' ) {
-          this.cmdResponse = obj?.RStream?.CmdResponse.CmdStatus;
-          this.textResponse = obj?.RStream?.CmdResponse.TextResponse;
+          this.cmdResponse = (obj?.RStream?.CmdResponse);
+          this.textResponse = (obj?.RStream?.CmdResponse?.TextResponse);
+          this.tranResponse =  obj?.RStream?.TranResponse as TranResponse;
         }
         if (item.value.substring(0, 5) === '<RStr') {
-          this.cmdResponse = obj?.CmdResponse.CmdStatus;
-          this.textResponse = obj?.CmdResponse.TextResponse;
+          this.cmdResponse = (obj?.RStream?.CmdResponse);
+          this.textResponse = (obj?.RStream?.CmdResponse?.TextResponse);
+          this.tranResponse =  obj?.RStream?.TranResponse as TranResponse;
         }
+
+        if (this.cmdResponse) {
+          this.getCmdResponse.emit(this.cmdResponse)
+        }
+        if (this.tranResponse) {
+          this.getTranResponse.emit(this.tranResponse)
+        }
+
+        this.cancelResponse  = false;
+        this.processRunning  = false;
         return  item ;
       }
     }
     this.transactionResponse = item?.value;
   }
 
+  async getMessageResponse() {
+    var timer = setInterval(
+      await this.checkMessageResponse,
+      500);
+    if(timer){
+    clearInterval(timer)
+    }
+  }
+
+  async checkMessageResponse() {
+    const options = {'response': '', value: ''};
+    let item = await dsiemvandroid.getMessageResponse(options);
+    this.messageResponse  = item.value;
+  }
+
   async getRequest() {
-    const options = {'response': ''};
+    const options = {'response': '', value: ''};
     let item = await dsiemvandroid.getRequest(options);
-    if (item.value) {
-      if (item.value.substring(0, 5) === '<?xml' || item.value.substring(0, 5) === '<RStr') {
+    if (item && item.value) {
+      try {
+        if (item.value.substring(0, 5) === '<?xml' || item.value.substring(0, 5) === '<RStr') {
 
-        item.value =  item?.value.replace('#', '')
-        item.value =  item?.value.replace('\n', '')
+          item.value =  item?.value.replace('#', '')
+          item.value =  item?.value.replace('\n', '')
 
-        const parser = new DOMParser();
+          const parser = new DOMParser();
 
-        const xml = parser.parseFromString(item.value, 'text/xml');
-        const obj = this.ngxXml2jsonService.xmlToJson(xml) as any;
+          const xml = parser.parseFromString(item.value, 'text/xml');
+          const obj = this.ngxXml2jsonService.xmlToJson(xml) as any;
 
-        return  obj
+          return  obj
+        }
+      } catch (error) {
+        console.log('item', item)
+        return   JSON.parse(item.value)
       }
 
     }
-    if (item) {
-      item.value =  item?.value.replace('\n', '')
-    }
+
     return  item
   }
 
@@ -470,6 +342,7 @@ export class DsiEMVAndroidComponent implements OnInit {
       if ((item && item.value != '') || this.cancelResponse) {
         this.cancelResponse = false;
         this.processRunning = false;
+        this.messageResponse = ''
         responseSuccess = 'complete'
         this.message = '';
         this.request = '';
@@ -479,7 +352,7 @@ export class DsiEMVAndroidComponent implements OnInit {
   }
 
   async getbtResponse(){
-    const options = {'response': ''};
+    const options = {'response': '', value: ''};
     const item = await dsiemvandroid.getbtResponse(options);
     console.log('getbtResponse 1', item)
     try {
@@ -488,13 +361,11 @@ export class DsiEMVAndroidComponent implements OnInit {
           this.cancelResponse = true;
           const parser = new DOMParser();
           item.value =  item?.value.replace('#', '')
-          console.log('bt response', item.value )
-
           const xml = parser.parseFromString(item.value, 'text/xml');
           const obj = this.ngxXml2jsonService.xmlToJson(xml) as any;
-
-          console.log('cmdResponse', obj?.RStream?.CmdResponse)
-          console.log('cmdResponse', obj?.RStream?.CmdResponse.TextResponse)
+          // console.log('cmdResponse', obj?.RStream?.CmdResponse)
+          // console.log('cmdResponse', obj?.RStream?.CmdResponse.TextResponse)
+          this.tranResponse =  this.textResponse = obj?.TranResponse;
 
           if (item.value.substring(0, 5) === '<RStr') {
             this.cmdResponse = obj?.RStream?.CmdResponse.CmdStatus;
@@ -504,6 +375,7 @@ export class DsiEMVAndroidComponent implements OnInit {
             this.cmdResponse = obj?.CmdResponse.CmdStatus;
             this.textResponse = obj?.CmdResponse.TextResponse;
           }
+
           this.cancelResponse = false;
           this.processRunning = false;
           return item;
@@ -521,6 +393,10 @@ export class DsiEMVAndroidComponent implements OnInit {
 
   async emvCancel() {
     try {
+      this.message = ''
+      this.messageResponse = ''
+      this.responseSuccess  = 'false'
+      this.hideRequest    = false;
       await this.resetResponse();
       this.cancelResponse = true;
       this.processRunning = false;
@@ -528,6 +404,7 @@ export class DsiEMVAndroidComponent implements OnInit {
       const item    = await dsiemvandroid.cancelTransaction(options)
       this.message  = ''
       this.request  = ''
+      this.tranResponse  = ''
       this.transactionResponse =  '';
     } catch (error) {
       this.message = error;
@@ -536,54 +413,44 @@ export class DsiEMVAndroidComponent implements OnInit {
 
   async emvSale() {
     try {
-      await this.resetResponse();
+
+      let options  = this.initTransaction();
+      console.log('emvSale', options);
+
+      if (!options) {
+        options = this.transaction;
+      }
+
       this.processRunning = true;
 
-      const options = this.initTransaction();
-      console.log('options', options)
+      await this.resetResponse();
+
       const item = await dsiemvandroid.processSale(options)
 
-      this.checkResponse();
+      await  this.checkResponse();
 
     } catch (error) {
       this.message = error;
     }
-  }
-
-  async emvReturn() {
-    try {
-      await this.resetResponse();
-      this.processRunning = true;
-      const options = { value: ' value.'}
-      const item = await dsiemvandroid.processReturn(options)
-      this.getResponse();
-
-    } catch (error) {
-      this.message = error;
-    }
-  }
-
-  async openPlugin() {
-    // const item = await dsiemvandroid.openEMV()
   }
 
   initTransaction(): any {
-    const amount       = '1.00';
-    const item         = {} as any;
-    const value        = this.transactionForm.value as Transaction;
-    item.pOSPackageID  = 'pointlesspos1.0'
-    item.padPort       = value.padPort;
-    item.pinPadIpAddress = value.pinPadIpAddress;
-    item.amount        = amount;
-    if (value.bluetoothDeviceName) {
-      item.secureDevice  = value.secureDevice;
+    const item           = {} as any;
+    const value          = this.dSIEMVAndroidService.savedSettings;// as Transaction;
+    if (value) {
+      item.amount          = value.amount;
+      item.pOSPackageID    = value.pOSPackageID
+      item.padPort         = value.padPort;
+      item.pinPadIpAddress = value.pinPadIpAddress;
+      item.merchantID      = value.merchantID;
+      item.secureDevice    = value.secureDevice;
+      item.tranCode        = value.tranCode;
+      item.bluetoothDeviceName  = value.bluetoothDeviceName;
+      if (!value.bluetoothDeviceName) {
+        item.bluetoothDeviceName  = value.secureDevice;
+      }
+      return item;
     }
-    if (!value.bluetoothDeviceName) {
-      item.secureDevice  = value.bluetoothDeviceName;
-    }
-
-    item.merchantID    = value.merchantID;
-    return item;
   }
 
 

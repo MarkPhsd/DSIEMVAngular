@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Capacitor, Plugins } from '@capacitor/core';
-// import { IPCService } from './ipc.service';
-
 export interface platFormInfo {
   platForm            : string;
   isApp               : boolean;

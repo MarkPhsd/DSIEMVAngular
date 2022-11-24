@@ -1,22 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { BoltConnectResponse } from 'src/app/models/models';
 import { Observable } from 'rxjs';
-
-export interface CardPointGateWay {
-  site: string;
-  url: string;
-  csurl: string;
-  merchid: string;
-  currency: string;
-  expiry: string;
-  account: string;
-  token: string;
-  retref: string;
-  profileid: string;
-  acctid: string;
-  batchid: string;
-  date: string;
-}
 
 @Injectable({
   providedIn: 'root'
@@ -24,39 +9,40 @@ export interface CardPointGateWay {
 
 export class CardPointBoltService {
 
+
   constructor(private http: HttpClient) { }
 
-  getCardPointBolt(apiURL: string, hsn: string): Observable<CardPointGateWay> {
+  getCardPointBolt(apiURL: string, hsn: string, sessionID: string): Observable<any> {
 
     const controller = '/cardpointe/'
 
     const endPoint = "getCardPointBolt"
 
-    const parameters = `?hsn=${hsn}`
+    const parameters = `?hsn=${hsn}&sessionID=${sessionID}`
 
     const url = `${apiURL}${controller}${endPoint}${parameters}`
 
-    return this.http.get<CardPointGateWay>(url)
+    return this.http.get<any>(url)
 
   }
 
-  ping(apiURL: string, hsn: string): Observable<CardPointGateWay> {
+  ping(apiURL: string, hsn: string, sessionID: string): Observable<any> {
 
     const controller = '/CardPointeBolt/'
 
     const endPoint = "PingTerminal"
 
-    const parameters = `?hsn=${hsn}`
+    const parameters = `?hsn=${hsn}&sessionID=${sessionID}`
 
     const url = `${apiURL}${controller}${endPoint}${parameters}`
 
     console.log(url)
 
-    return this.http.get<CardPointGateWay>(url)
+    return this.http.get<any>(url)
 
   }
 
-  connect(apiURL: string, hsn: string): Observable<CardPointGateWay> {
+  connect(apiURL: string, hsn: string): Observable<BoltConnectResponse> {
 
     const controller = '/CardPointeBolt/'
 
@@ -66,37 +52,110 @@ export class CardPointBoltService {
 
     const url = `${apiURL}${controller}${endPoint}${parameters}`
 
-    return this.http.get<CardPointGateWay>(url)
+    return this.http.get<BoltConnectResponse>(url)
 
   }
 
-  listTerminals(apiURL: string, hsn: string): Observable<CardPointGateWay> {
+  listTerminals(apiURL: string, hsn: string, sessionID: string): Observable<any> {
 
     const controller = '/CardPointeBolt/'
 
     const endPoint = "listTerminals"
 
-    const parameters = `?hsn=${hsn}`
+    const parameters = `?hsn=${hsn}&sessionID=${sessionID}`
 
     const url = `${apiURL}${controller}${endPoint}${parameters}`
 
-    return this.http.get<CardPointGateWay>(url)
+    return this.http.get<any>(url)
 
   }
 
-  disconnect(apiURL: string, hsn: string): Observable<CardPointGateWay> {
+  disconnect(apiURL: string, hsn: string, sessionID: string): Observable<any> {
 
     const controller = '/CardPointeBolt/'
 
     const endPoint = "disconnect"
 
-    const parameters = `?hsn=${hsn}`
+    const parameters = `?hsn=${hsn}&sessionID=${sessionID}`
 
     const url = `${apiURL}${controller}${endPoint}${parameters}`
 
-    return this.http.get<CardPointGateWay>(url)
+    return this.http.get<any>(url)
 
   }
 
+  terminalDetails(apiURL: string, hsn: string, sessionID: string): Observable<any> {
+
+    const controller = '/CardPointeBolt/'
+
+    const endPoint = "terminalDetails"
+
+    const parameters = `?hsn=${hsn}&sessionID=${sessionID}`
+
+    const url = `${apiURL}${controller}${endPoint}${parameters}`
+
+    return this.http.get<any>(url)
+
+  }
+
+   // https://developer.cardpointe.com/bolt-terminal#readCard
+   cancel(apiURL: string, hsn:string, sessionID: string): Observable<any> {
+
+    const controller = '/CardPointeBolt/'
+
+    const endPoint = "cancel"
+
+    const parameters = `?sessionID=${sessionID}&hsn=${hsn}`
+
+    const url = `${apiURL}${controller}${endPoint}${parameters}`
+
+    return this.http.get<any>(url)
+
+  }
+
+  // https://developer.cardpointe.com/bolt-terminal#readCard
+  readCard(apiURL: string, item: any, sessionID: string): Observable<any> {
+
+    const controller = '/CardPointeBolt/'
+
+    const endPoint = "readCard"
+
+    const parameters = `?sessionID=${sessionID}`
+
+    const url = `${apiURL}${controller}${endPoint}${parameters}`
+
+    return this.http.post<any>(url, item)
+
+  }
+
+  // https://developer.cardpointe.com/bolt-terminal#authCard
+  authCard(apiURL: string, item: any, sessionID: string): Observable<any> {
+
+    const controller = '/CardPointeBolt/'
+
+    const endPoint = "authCard"
+
+    const parameters = `?sessionID=${sessionID}`
+
+    const url = `${apiURL}${controller}${endPoint}${parameters}`
+
+    return this.http.post<any>(url, item)
+
+  }
+
+  // https://developer.cardpointe.com/bolt-terminal#authManual
+  authManual(apiURL: string, item: any, sessionID: string): Observable<any> {
+
+    const controller = '/CardPointeBolt/'
+
+    const endPoint = "authManual"
+
+    const parameters = `?sessionID=${sessionID}`
+
+    const url = `${apiURL}${controller}${endPoint}${parameters}`
+
+    return this.http.post<any>(url, item)
+
+  }
 
 }

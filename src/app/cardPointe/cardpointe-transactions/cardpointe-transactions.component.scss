@@ -8,3 +8,10 @@
 button {
   margin: 10px;
 }
+
+
+.transaction-buttons-grid {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat( auto-fit, minmax(155px, 1fr) );
+}

@@ -38,6 +38,9 @@ export class PointlessCCPanelComponent implements OnInit {
     this.router.navigateByUrl('settings')
   }
 
+  paypal() {
+    this.router.navigateByUrl('paypal')
+  }
 }
 
 // { path: 'dsievmAndroid',   component: DsiEMVAndroidComponent,   data: { animation: 'isLeft'} },

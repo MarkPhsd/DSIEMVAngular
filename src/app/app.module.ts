@@ -18,6 +18,9 @@ import { CardpointeTransactionsComponent } from './cardPointe/cardpointe-transac
 import { CardPointIDTECHAndroidComponent } from './cardPointe/card-point-idtechandroid/card-point-idtechandroid.component';
 import { DSIAndroidSettingsComponent } from './dsiEMVAndroid/dsiandroid-settings/dsiandroid-settings.component';
 import { DsiAndroidResultsComponent } from './dsiEMVAndroid/dsi-android-results/dsi-android-results.component';
+import { PaypalComponent } from './paypal/paypal.component';
+import { ValueFieldsComponent } from './shared/value-fields/value-fields.component';
+
 // export { PointlessCCDSIEMVAndroidService } from './services/dsiemvandroid.service';
 // export { PointlessCCDsiAngularService } from './services/dsi-angular.service';
 // export { DeviceInfoService} from './services/device-info.service';
@@ -45,7 +48,9 @@ import { DsiAndroidResultsComponent } from './dsiEMVAndroid/dsi-android-results/
     DSIAndroidSettingsComponent,
     DsiAndroidResultsComponent,
     UserSettingsComponent,
+    PaypalComponent,
     SafePipe,
+    ValueFieldsComponent,
   ],
   exports: [
     PointlessCCPanelComponent,
@@ -57,6 +62,8 @@ import { DsiAndroidResultsComponent } from './dsiEMVAndroid/dsi-android-results/
     DSIAndroidSettingsComponent,
     DsiAndroidResultsComponent,
     UserSettingsComponent,
+    PaypalComponent,
+    ValueFieldsComponent,
   ],
 
   providers:  [

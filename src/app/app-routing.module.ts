@@ -4,6 +4,7 @@ import { CardPointIDTECHAndroidComponent } from './cardPointe/card-point-idtecha
 import { CardPointSettingsComponent } from './cardPointe/card-point-settings/card-point-settings.component';
 import { CardpointeTransactionsComponent } from './cardPointe/cardpointe-transactions/cardpointe-transactions.component';
 import { DsiEMVAndroidComponent } from './dsiEMVAndroid/dsi-emvandroid/dsi-emvandroid.component';
+import { PaypalComponent } from './paypal/paypal.component';
 import { UserSettingsComponent } from './user-settings/user-settings.component';
 
 const routes: Routes = [
@@ -14,6 +15,7 @@ const routes: Routes = [
   { path: 'cardPointSetings', component: CardPointSettingsComponent,   data: { animation: 'isLeft'} },
   { path: 'cardPointAndroid', component: CardPointIDTECHAndroidComponent,   data: { animation: 'isLeft'} },
   { path: 'cardpointtransactions', component: CardpointeTransactionsComponent,   data: { animation: 'isLeft'} },
+  { path: 'paypal', component: PaypalComponent,   data: { animation: 'isLeft'} },
 ]
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

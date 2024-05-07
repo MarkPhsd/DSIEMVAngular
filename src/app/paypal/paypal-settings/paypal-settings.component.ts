@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { PaypalService } from 'src/services/paypal.service';
 
 @Component({
@@ -9,9 +9,9 @@ import { PaypalService } from 'src/services/paypal.service';
 })
 export class PaypalSettingsComponent implements OnInit {
 
-  inputForm: FormGroup;
+  inputForm: UntypedFormGroup;
 
-  constructor(private fb : FormBuilder,
+  constructor(private fb : UntypedFormBuilder,
               public paypalService: PaypalService) { }
 
   ngOnInit(): void {

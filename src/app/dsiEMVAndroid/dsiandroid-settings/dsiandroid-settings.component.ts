@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { Transaction } from 'src/app/models/models';
 import { dsiemvandroid } from 'dsiemvandroidplugin';
 import { PointlessCCDSIEMVAndroidService } from 'src/app/services/dsiemvandroid.service';
@@ -14,12 +14,12 @@ export class DSIAndroidSettingsComponent implements OnInit {
   @Output() getDSISettings = new EventEmitter();
   @Input() setDSISettings: Transaction;
 
-  inputForm: FormGroup;
+  inputForm: UntypedFormGroup;
   blueToothDeviceList: any;
   dsiDeviceList: any;
   viewSelectDeviceList: boolean;
 
-  constructor(private fb: FormBuilder,
+  constructor(private fb: UntypedFormBuilder,
               private dSIEMVAndroidService: PointlessCCDSIEMVAndroidService) { }
 
   async ngOnInit() {

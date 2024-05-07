@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { IUser } from '../interceptors/basic-auth.interceptor';
 
 @Component({
@@ -9,9 +9,9 @@ import { IUser } from '../interceptors/basic-auth.interceptor';
 })
 export class UserSettingsComponent implements OnInit {
 
-  inputForm: FormGroup;
+  inputForm: UntypedFormGroup;
 
-  constructor(private fb: FormBuilder) { }
+  constructor(private fb: UntypedFormBuilder) { }
 
   ngOnInit()  {
     this.initForm();

@@ -20,7 +20,10 @@ import { DSIAndroidSettingsComponent } from './dsiEMVAndroid/dsiandroid-settings
 import { DsiAndroidResultsComponent } from './dsiEMVAndroid/dsi-android-results/dsi-android-results.component';
 import { PaypalComponent } from './paypal/paypal.component';
 import { ValueFieldsComponent } from './shared/value-fields/value-fields.component';
-
+import { NgxPayPalModule } from 'ngx-paypal';
+import { TriPOSTransactionsComponent } from './triPOS/tri-postransactions/tri-postransactions.component';
+import { TriPOSSettingsComponent } from './triPOS/tri-possettings/tri-possettings.component';
+import { TriPOSDeviceSetupComponent } from './triPOS/tri-posdevice-setup/tri-posdevice-setup.component';
 // export { PointlessCCDSIEMVAndroidService } from './services/dsiemvandroid.service';
 // export { PointlessCCDsiAngularService } from './services/dsi-angular.service';
 // export { DeviceInfoService} from './services/device-info.service';
@@ -29,60 +32,52 @@ import { ValueFieldsComponent } from './shared/value-fields/value-fields.compone
 // export { CardPointBoltService} from  './services/card-point-bolt.service';
 
 @NgModule({
-  imports: [
-    HttpClientModule,
-    BrowserAnimationsModule,
-    BrowserModule,
-    AppRoutingModule,
-    MaterialModule,
-    FormsModule,
-    ReactiveFormsModule,
-  ],
-  declarations: [
-    PointlessCCPanelComponent,
-    CardPointSettingsComponent,
-    CardPointIDTECHAndroidComponent,
-    CardpointeTransactionsComponent,
-    CpVIVO3300Component,
-    DsiEMVAndroidComponent,
-    DSIAndroidSettingsComponent,
-    DsiAndroidResultsComponent,
-    UserSettingsComponent,
-    PaypalComponent,
-    SafePipe,
-    ValueFieldsComponent,
-  ],
-  exports: [
-    PointlessCCPanelComponent,
-    CardPointSettingsComponent,
-    CardPointIDTECHAndroidComponent,
-    CardpointeTransactionsComponent,
-    CpVIVO3300Component,
-    DsiEMVAndroidComponent,
-    DSIAndroidSettingsComponent,
-    DsiAndroidResultsComponent,
-    UserSettingsComponent,
-    PaypalComponent,
-    ValueFieldsComponent,
-  ],
-
-  providers:  [
-    { provide: HTTP_INTERCEPTORS,  useClass: BasicAuthInterceptor, multi: true },
-    { provide: HTTP_INTERCEPTORS,  useClass: ErrorInterceptor, multi: true },
-  ],
-  schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
-  bootstrap: [PointlessCCPanelComponent],
-  entryComponents: [
-    PointlessCCPanelComponent,
-    // CardPointSettingsComponent,
-    // CardPointIDTECHAndroidComponent,
-    // CardpointeTransactionsComponent,
-    // CpVIVO3300Component,
-    // DsiEMVAndroidComponent,
-    // DSIAndroidSettingsComponent,
-    // DsiAndroidResultsComponent,
-    // DsiAndroidResultsComponent,
-   ]
+    imports: [
+        HttpClientModule,
+        BrowserAnimationsModule,
+        BrowserModule,
+        AppRoutingModule,
+        MaterialModule,
+        FormsModule,
+        NgxPayPalModule,
+        ReactiveFormsModule,
+    ],
+    declarations: [
+        PointlessCCPanelComponent,
+        CardPointSettingsComponent,
+        CardPointIDTECHAndroidComponent,
+        CardpointeTransactionsComponent,
+        CpVIVO3300Component,
+        DsiEMVAndroidComponent,
+        DSIAndroidSettingsComponent,
+        DsiAndroidResultsComponent,
+        UserSettingsComponent,
+        PaypalComponent,
+        SafePipe,
+        ValueFieldsComponent,
+        TriPOSTransactionsComponent,
+        TriPOSSettingsComponent,
+        TriPOSDeviceSetupComponent,
+    ],
+    exports: [
+        PointlessCCPanelComponent,
+        CardPointSettingsComponent,
+        CardPointIDTECHAndroidComponent,
+        CardpointeTransactionsComponent,
+        CpVIVO3300Component,
+        DsiEMVAndroidComponent,
+        DSIAndroidSettingsComponent,
+        DsiAndroidResultsComponent,
+        UserSettingsComponent,
+        PaypalComponent,
+        ValueFieldsComponent,
+    ],
+    providers: [
+        { provide: HTTP_INTERCEPTORS, useClass: BasicAuthInterceptor, multi: true },
+        { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+    ],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    bootstrap: [PointlessCCPanelComponent]
 })
 export class PaymentProcessingModule { }
 

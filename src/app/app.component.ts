@@ -15,32 +15,36 @@ export class PointlessCCPanelComponent implements OnInit {
   ngOnInit(): void {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     //Add 'implements OnInit' to the class.
-
   }
 
   dsiEMVAndroid() {
-    this.router.navigateByUrl('dsievmAndroid')
+    this.navigate('dsievmAndroid')
   }
 
   cardPointe() {
-    this.router.navigateByUrl('cardPointSetings')
+    this.navigate('cardPointSetings')
   }
 
   cardPointeTransactions() {
-    this.router.navigateByUrl('cardpointtransactions')
+    this.navigate('cardpointtransactions')
   }
 
   cardPointeAndroid() {
-    this.router.navigateByUrl('cardPointAndroid')
+    this.navigate('cardPointAndroid')
   }
 
   settings() {
-    this.router.navigateByUrl('settings')
+    this.navigate('settings')
   }
 
   paypal() {
-    this.router.navigateByUrl('paypal')
+    this.navigate('paypal')
   }
+
+  navigate(address) {
+    this.router.navigateByUrl(address)
+  }
+
 }
 
 // { path: 'dsievmAndroid',   component: DsiEMVAndroidComponent,   data: { animation: 'isLeft'} },

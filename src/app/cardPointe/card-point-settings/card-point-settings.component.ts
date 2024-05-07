@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { BoltInfo } from 'src/app/models/models';
 import { CardPointMethodsService } from  'src/app/services/card-point-methods.service';
 import { DeviceInfoService } from 'src/app/services/device-info.service';
@@ -12,10 +12,10 @@ import { DeviceInfoService } from 'src/app/services/device-info.service';
 export class CardPointSettingsComponent implements OnInit {
 
   deviceName : string;
-  inputForm : FormGroup;
+  inputForm : UntypedFormGroup;
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     public methodsService: CardPointMethodsService,
     public deviceInfoService: DeviceInfoService) {
   }

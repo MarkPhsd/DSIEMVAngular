@@ -16,7 +16,6 @@ export class CardpointeTransactionsComponent implements OnInit, OnDestroy {
   private _sale               = new BehaviorSubject<number>(null);
   public itemProcessSection$  = this._sale.asObservable();
 
-
   constructor(  public methodsService: CardPointMethodsService
               ) { }
 
@@ -38,8 +37,6 @@ export class CardpointeTransactionsComponent implements OnInit, OnDestroy {
     //Add 'implements OnDestroy' to the class.
     if ( this._sale) { this._sale.unsubscribe()}
   }
-
-
 
   processSale() {
     this._sale.subscribe(data => {

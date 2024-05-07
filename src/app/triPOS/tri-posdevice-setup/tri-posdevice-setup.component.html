@@ -1,0 +1,52 @@
+<mat-card>
+  <mat-card-title><ng-content #name></ng-content>
+  </mat-card-title>
+  <mat-card-content >
+
+
+
+    <ng-template #processing>
+      {{process}}
+      <div *ngIf="process">
+        ...processing
+      </div>
+    </ng-template>
+
+    <div *ngIf="inputForm" [formGroup]="inputForm" >
+      <div>
+          <mat-card-subtitle>Admin</mat-card-subtitle>
+      </div>
+        <div class="grid-fields">
+        <div>
+          <mat-form-field appearance="outline">
+            <mat-label>ActivationCode</mat-label>
+            <input matInput formControlName="activationCode" matInput >
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field appearance="outline">
+            <mat-label>Terminal ID</mat-label>
+            <input matInput formControlName="terminalID" matInput >
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field appearance="outline">
+            <mat-label>Lane ID</mat-label>
+            <input matInput formControlName="laneId" matInput >
+          </mat-form-field>
+        </div>
+    </div>
+      <button mat-raised-button  (click)="activateDevice()">Activate Lane</button>
+    </div>
+
+  <div>
+    <button mat-raised-button  (click)="listLanes()">List  Lanes</button>
+  </div>
+
+    <div *ngIf="(action$ | async) as action; else processing">
+      <h2>Results</h2>
+      <button mat-raised-button  (click)="action$ = null">Clear</button>
+      {{action | json}}
+    </div>
+</mat-card-content>
+</mat-card>

@@ -9,6 +9,12 @@
       <div><button mat-raised-button (click)="paypal()">PayPal</button> </div>
       <div><button mat-raised-button (click)="settings()"><mat-icon>settings</mat-icon></button> </div>
     </div>
+    <h2>Tri POS</h2>
+    <div class="grid-buttons">
+      <div><button mat-raised-button (click)="navigate('tripos-setup')">Setup</button> </div>
+      <div><button mat-raised-button (click)="navigate('tripos-settings')"><mat-icon>settings</mat-icon>Settings</button> </div>
+      <div><button mat-raised-button (click)="navigate('tripos-transactions')"><mat-icon>sale</mat-icon>Transactions</button> </div>
+    </div>
   </mat-card-content>
 </mat-card>
 <router-outlet></router-outlet>

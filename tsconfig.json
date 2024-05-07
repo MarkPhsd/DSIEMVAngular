@@ -12,7 +12,7 @@
     "importHelpers": true,
     "target": "es2020",
     "lib": [
-      "es2018",
+      "es2020",
       "dom"
     ],
     "typeRoots": [
@@ -23,9 +23,8 @@
     ],
   },
   "angularCompilerOptions": {
-    "enableI18nLegacyMessageIdFormat": false,
-    "strictInjectionParameters": false,
-    "strictInputAccessModifiers": false,
-    "strictTemplates": false
+    "fullTemplateTypeCheck": true,
+    "strictInjectionParameters": true,
+    "experimentalDecorators": true
   }
 }

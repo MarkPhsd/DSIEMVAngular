@@ -18,6 +18,8 @@ export class DSIAndroidSettingsComponent implements OnInit {
   blueToothDeviceList: any;
   dsiDeviceList: any;
   viewSelectDeviceList: boolean;
+  secureDevice: string;
+  selected: any;
 
   constructor(private fb: UntypedFormBuilder,
               private dSIEMVAndroidService: PointlessCCDSIEMVAndroidService) { }
@@ -76,6 +78,9 @@ export class DSIAndroidSettingsComponent implements OnInit {
     })
   }
 
+  listBTDevices() {
+
+  }
   saveSettings() {
     if (this.inputForm && this.inputForm.value) {
       const item = this.inputForm.value;

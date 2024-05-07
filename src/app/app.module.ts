@@ -1,29 +1,26 @@
 import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+// import { BrowserModule } from '@angular/platform-browser';
+// import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { PointlessCCPanelComponent } from './app.component';
 import { MaterialModule } from './material.module';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { SafePipe } from './safe-pipe.pipe';
-import { CardPointSettingsComponent } from './cardPointe/card-point-settings/card-point-settings.component';
+
 import { DsiEMVAndroidComponent } from './dsiEMVAndroid/dsi-emvandroid/dsi-emvandroid.component';
-import { CpVIVO3300Component } from './cardPointe/cp-vivo3300/cp-vivo3300.component';
+
 import { UserSettingsComponent } from './user-settings/user-settings.component';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS, JsonpInterceptor } from '@angular/common/http';
 import { ErrorInterceptor } from './interceptors/error.interceptor';
 import { BasicAuthInterceptor } from './interceptors/basic-auth.interceptor';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { CardpointeTransactionsComponent } from './cardPointe/cardpointe-transactions/cardpointe-transactions.component';
-import { CardPointIDTECHAndroidComponent } from './cardPointe/card-point-idtechandroid/card-point-idtechandroid.component';
+
 import { DSIAndroidSettingsComponent } from './dsiEMVAndroid/dsiandroid-settings/dsiandroid-settings.component';
 import { DsiAndroidResultsComponent } from './dsiEMVAndroid/dsi-android-results/dsi-android-results.component';
 import { PaypalComponent } from './paypal/paypal.component';
 import { ValueFieldsComponent } from './shared/value-fields/value-fields.component';
-import { NgxPayPalModule } from 'ngx-paypal';
-import { TriPOSTransactionsComponent } from './triPOS/tri-postransactions/tri-postransactions.component';
-import { TriPOSSettingsComponent } from './triPOS/tri-possettings/tri-possettings.component';
-import { TriPOSDeviceSetupComponent } from './triPOS/tri-posdevice-setup/tri-posdevice-setup.component';
+import { JsonPipe } from '@angular/common';
+
 // export { PointlessCCDSIEMVAndroidService } from './services/dsiemvandroid.service';
 // export { PointlessCCDsiAngularService } from './services/dsi-angular.service';
 // export { DeviceInfoService} from './services/device-info.service';
@@ -34,20 +31,16 @@ import { TriPOSDeviceSetupComponent } from './triPOS/tri-posdevice-setup/tri-pos
 @NgModule({
     imports: [
         HttpClientModule,
-        BrowserAnimationsModule,
-        BrowserModule,
+        // BrowserAnimationsModule,
+        // BrowserModule,
         AppRoutingModule,
         MaterialModule,
         FormsModule,
-        NgxPayPalModule,
         ReactiveFormsModule,
+        JsonPipe,
     ],
     declarations: [
         PointlessCCPanelComponent,
-        CardPointSettingsComponent,
-        CardPointIDTECHAndroidComponent,
-        CardpointeTransactionsComponent,
-        CpVIVO3300Component,
         DsiEMVAndroidComponent,
         DSIAndroidSettingsComponent,
         DsiAndroidResultsComponent,
@@ -55,16 +48,11 @@ import { TriPOSDeviceSetupComponent } from './triPOS/tri-posdevice-setup/tri-pos
         PaypalComponent,
         SafePipe,
         ValueFieldsComponent,
-        TriPOSTransactionsComponent,
-        TriPOSSettingsComponent,
-        TriPOSDeviceSetupComponent,
+        // JsonPipe  ,
     ],
     exports: [
         PointlessCCPanelComponent,
-        CardPointSettingsComponent,
-        CardPointIDTECHAndroidComponent,
-        CardpointeTransactionsComponent,
-        CpVIVO3300Component,
+
         DsiEMVAndroidComponent,
         DSIAndroidSettingsComponent,
         DsiAndroidResultsComponent,

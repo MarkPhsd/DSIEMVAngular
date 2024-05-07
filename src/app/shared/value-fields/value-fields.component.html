@@ -10,7 +10,7 @@
           <div #itemText>
              <ng-content></ng-content>
           </div>
-          {{itemHeader | titlecase}}
+          {{itemHeader}}
         </mat-label>
         <div *ngIf="type === 'input' && passwordMask">
           <input matInput

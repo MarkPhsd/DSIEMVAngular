@@ -21,24 +21,8 @@ export class PointlessCCPanelComponent implements OnInit {
     this.navigate('dsievmAndroid')
   }
 
-  cardPointe() {
-    this.navigate('cardPointSetings')
-  }
-
-  cardPointeTransactions() {
-    this.navigate('cardpointtransactions')
-  }
-
-  cardPointeAndroid() {
-    this.navigate('cardPointAndroid')
-  }
-
   settings() {
     this.navigate('settings')
-  }
-
-  paypal() {
-    this.navigate('paypal')
   }
 
   navigate(address) {

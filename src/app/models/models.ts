@@ -16,6 +16,8 @@ export interface TranResponse {
   TextResponse: string;
   Date: string;
   Time: string;
+  AcctNo: string;
+  AcqRefData: string;
 }
 export interface Transaction {
    merchantID: string;
